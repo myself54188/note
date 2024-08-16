@@ -433,3 +433,4 @@ public String testRest(@PathVariable("id") String id, @PathVariable("username") 
 
 ## 四. SpringMVC获取请求参数
 
+ 
