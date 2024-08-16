@@ -80,26 +80,26 @@ docBase 表示你的工程目录在哪里
 
 ### IDEA 整合tomcat服务器：
 
-![](https://pic.imgdb.cn/item/66bf3e5ed9c307b7e9a7bd81.png)
+![](https://github.com/myself54188/picx-images-hosting/raw/master/image-20240713161246300.3nrjk8g3oz.webp)
 
-![](https://pic.imgdb.cn/item/66bf3ebdd9c307b7e9a8109b.png)
+![](https://github.com/myself54188/picx-images-hosting/raw/master/image-20240713162825131.8z6g4y26d3.webp)
 
 
 
 ### IDEA创建web项目：
 
-​	![](https://pic.imgdb.cn/item/66bf3e6cd9c307b7e9a7c653.png)
+​	![](https://github.com/myself54188/picx-images-hosting/raw/master/image-20240713162210713.9gwhtj3jxw.webp)
 
-![](https://pic.imgdb.cn/item/66bf3f0fd9c307b7e9a85a80.png)
+![](https://github.com/myself54188/picx-images-hosting/raw/master/image-20240713182538769.7p3iymk722.webp)
 
-![](https://pic.imgdb.cn/item/66bf3e8fd9c307b7e9a7e638.png)
+![](https://github.com/myself54188/picx-images-hosting/raw/master/image-20240713162312978.3uurfo294l.webp)
 
-![](https://pic.imgdb.cn/item/66bf3e9cd9c307b7e9a7f5c0.png)
+![](https://github.com/myself54188/picx-images-hosting/raw/master/image-20240713162421903.6m3tnqod6e.webp)
 
-![](https://pic.imgdb.cn/item/66bf3eabd9c307b7e9a80201.png)
+![](https://github.com/myself54188/picx-images-hosting/raw/master/image-20240713162535101.2yya07skon.webp)
 
-![](https://pic.imgdb.cn/item/66bf3ed2d9c307b7e9a821c1.png)
+![](https://github.com/myself54188/picx-images-hosting/raw/master/image-20240713175903489.41xzb3oek8.webp)
 
-![](https://pic.imgdb.cn/item/66bf3ee3d9c307b7e9a83433.png)
+![](https://github.com/myself54188/picx-images-hosting/raw/master/image-20240713180507175.86tkn7lkmx.webp)
 
-![](https://pic.imgdb.cn/item/66bf3f00d9c307b7e9a84beb.png) 
+![](https://github.com/myself54188/picx-images-hosting/raw/master/image-20240713181908000.51e2o9r5q2.webp) 

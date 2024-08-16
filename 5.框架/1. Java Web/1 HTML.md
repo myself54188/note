@@ -115,7 +115,7 @@
 
 特殊字符：
 
-![](https://pic.imgdb.cn/item/66bf424dd9c307b7e9ae11fc.png)
+![](https://github.com/myself54188/picx-images-hosting/raw/master/特殊字符8.4uausu50bj.webp)
 
 
 
@@ -215,7 +215,7 @@ rowspan：设置单元格占几个行
 
 在HTML中，一个完整的表单通常由<font color = "red">表单域</font>，<font color = "red">表单控件（表单元素）</font>和<font color = "red">提示信息</font>三部分组成。
 
-![](https://pic.imgdb.cn/item/66bf41d9d9c307b7e9ada483.png)
+![](https://github.com/myself54188/picx-images-hosting/raw/master/表单.5fkif4zgm2.webp)
 
 1. 表单域
 
@@ -274,13 +274,13 @@ rowspan：设置单元格占几个行
 
       type可以取的值：
 
-      ![](https://pic.imgdb.cn/item/66bf40fbd9c307b7e9acc6eb.png)
+      ![](https://github.com/myself54188/picx-images-hosting/raw/master/input表单.175b5b97td.webp)
 
       
 
       其他属性：
 
-      ![](https://pic.imgdb.cn/item/66bf3cefd9c307b7e9a676c9.png)
+      ![](https://github.com/myself54188/picx-images-hosting/raw/master/aaaaaa.10239vn2ct.webp)
 
       
 
@@ -313,7 +313,7 @@ rowspan：设置单元格占几个行
    
       效果：
 
-      ![](https://pic.imgdb.cn/item/66bf42abd9c307b7e9ae7f76.png)
+      ![](https://github.com/myself54188/picx-images-hosting/raw/master/效果.60u61ftwwy.webp)
 
       
 

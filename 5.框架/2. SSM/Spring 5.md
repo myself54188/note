@@ -13,7 +13,7 @@
    5. 方便进行事务操作
    6. 降低 API 开发难度
 
-![](https://pic.imgdb.cn/item/66bf3c94d9c307b7e9a62952.png)
+![](https://myself54188.github.io/picx-images-hosting/66bf3c94d9c307b7e9a62952.3k7xmiakmu.webp)
 
 
 
@@ -64,7 +64,7 @@ AOP 需要导入 jar 包：
 2. 工厂模式：service 通过工厂模式调用 Dao 
 3. 反射
 
-![](https://pic.imgdb.cn/item/66bf401dd9c307b7e9aab8f9.png)
+![](https://github.com/myself54188/picx-images-hosting/raw/master/image-20240805153434812.4ckt493mq1.webp)
 
  
 
@@ -423,7 +423,7 @@ public class OrdersTest {
 </bean>
 ```
 
-![](https://pic.imgdb.cn/item/66bf4035d9c307b7e9ab1028.png)
+![](https://github.com/myself54188/picx-images-hosting/raw/master/image-20240805231323384.7zqcrrzf7u.webp)
 
 生命周期（加入后置处理器版本）：
 
@@ -470,7 +470,7 @@ public class beanPostProcessor implements BeanPostProcessor {
 <bean id="beanPostProcessor" class="com.chr.Spring5.ioc.bean.beanPostProcessor"></bean>
 ```
 
-![](https://pic.imgdb.cn/item/66bf404dd9c307b7e9ab6421.png)
+![](https://github.com/myself54188/picx-images-hosting/raw/master/image-20240805231424600.8z6g4y26dm.webp)
 
 
 

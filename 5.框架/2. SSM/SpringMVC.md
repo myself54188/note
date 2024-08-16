@@ -190,7 +190,7 @@ public class HelloController {
 
 ##### 6. 测试
 
-![](https://pic.imgdb.cn/item/66bf40ccd9c307b7e9ac913b.png)
+![](https://github.com/myself54188/picx-images-hosting/raw/master/image-20240813153712344.6t71j6aimn.webp)
 
 添加一个跳转功能
 
@@ -206,7 +206,7 @@ public String toTarget() {
 }
 ```
 
-![](https://pic.imgdb.cn/item/66bf40e2d9c307b7e9acae07.png)
+![](https://github.com/myself54188/picx-images-hosting/raw/master/image-20240813154323944.45lufddxs.webp)
 
 ##### 7. 总结
 
