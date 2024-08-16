@@ -16,7 +16,7 @@
 
    设置文本的下划线，删除线，上划线等等。
 
-   ![](..\..\0.笔记图片\线.png)
+   ![](https://pic.imgdb.cn/item/66bf4297d9c307b7e9ae67bf.png)
 
 4. ==text-indent==
 
@@ -40,4 +40,4 @@
 
 ## **总结：**
 
-![](..\..\0.笔记图片\text总结.png)
+![](https://pic.imgdb.cn/item/66bf418ed9c307b7e9ad53d4.png)

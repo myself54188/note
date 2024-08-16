@@ -190,7 +190,7 @@ public class HelloController {
 
 ##### 6. 测试
 
-![image-20240813153712344](../../0.笔记图片/image-20240813153712344.png)
+![](https://pic.imgdb.cn/item/66bf40ccd9c307b7e9ac913b.png)
 
 添加一个跳转功能
 
@@ -206,7 +206,7 @@ public String toTarget() {
 }
 ```
 
-![image-20240813154323944](../../0.笔记图片/image-20240813154323944.png)
+![](https://pic.imgdb.cn/item/66bf40e2d9c307b7e9acae07.png)
 
 ##### 7. 总结
 
@@ -433,3 +433,4 @@ public String testRest(@PathVariable("id") String id, @PathVariable("username") 
 
 ## 四. SpringMVC获取请求参数
 
+23745343

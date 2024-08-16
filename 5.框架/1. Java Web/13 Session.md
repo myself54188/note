@@ -114,7 +114,7 @@ public class SessionServlet extends BaseServlet {
 
 ### 浏览器和Session之间关联的技术内幕：
 
-![image-20240725201909652](../../0.笔记图片/image-20240725201909652.png)
+![](https://pic.imgdb.cn/item/66bf3fded9c307b7e9aa24d9.png)
 
 Session 技术，底层其实是基于 Cookie 技术来实现的。
 

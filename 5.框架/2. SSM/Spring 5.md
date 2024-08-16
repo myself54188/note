@@ -1,13 +1,10 @@
 ## Spring 介绍
 
 1. Spring 是轻量级的开源的 JavaEE 框架
-
 2. Spring 可以解决企业应用开发的复杂性
-
 3. Spring 有两个核心部分：IOC 和 AOP
    1. IOC：控制反转，把创建对象过程交给 Spring 进行管理
    2. AOP：面向切面，不修改源代码进行功能增强
-
 4. Spring 特点
    1. 方便解耦，简化开发
    2. Aop 编程支持
@@ -16,7 +13,7 @@
    5. 方便进行事务操作
    6. 降低 API 开发难度
 
-![img](../../0.笔记图片/480452-20190318225849216-2097896352.png)
+![](https://pic.imgdb.cn/item/66bf3c94d9c307b7e9a62952.png)
 
 
 
@@ -67,7 +64,7 @@ AOP 需要导入 jar 包：
 2. 工厂模式：service 通过工厂模式调用 Dao 
 3. 反射
 
-![image-20240805153434812](../../0.笔记图片/image-20240805153434812.png)
+![](https://pic.imgdb.cn/item/66bf401dd9c307b7e9aab8f9.png)
 
  
 
@@ -426,7 +423,7 @@ public class OrdersTest {
 </bean>
 ```
 
-![image-20240805231323384](../../0.笔记图片/image-20240805231323384.png)
+![](https://pic.imgdb.cn/item/66bf4035d9c307b7e9ab1028.png)
 
 生命周期（加入后置处理器版本）：
 
@@ -473,7 +470,7 @@ public class beanPostProcessor implements BeanPostProcessor {
 <bean id="beanPostProcessor" class="com.chr.Spring5.ioc.bean.beanPostProcessor"></bean>
 ```
 
-![image-20240805231424600](../../0.笔记图片/image-20240805231424600.png)
+![](https://pic.imgdb.cn/item/66bf404dd9c307b7e9ab6421.png)
 
 
 

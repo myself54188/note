@@ -80,28 +80,26 @@ docBase 表示你的工程目录在哪里
 
 ### IDEA 整合tomcat服务器：
 
-![image-20240713161246300](../../0.笔记图片/image-20240713161246300.png)
+![](https://pic.imgdb.cn/item/66bf3e5ed9c307b7e9a7bd81.png)
 
-![image-20240713162825131](../../0.笔记图片/image-20240713162825131.png)
+![](https://pic.imgdb.cn/item/66bf3ebdd9c307b7e9a8109b.png)
 
 
 
 ### IDEA创建web项目：
 
-​	![创建新模块](../../0.笔记图片/image-20240713162210713.png)
+​	![](https://pic.imgdb.cn/item/66bf3e6cd9c307b7e9a7c653.png)
 
-![导入tomcat库](../../0.笔记图片/image-20240713182538769.png)
+![](https://pic.imgdb.cn/item/66bf3f0fd9c307b7e9a85a80.png)
 
-![添加框架支持](../../0.笔记图片/image-20240713162312978.png)
+![](https://pic.imgdb.cn/item/66bf3e8fd9c307b7e9a7e638.png)
 
-![image-20240713162421903](../../0.笔记图片/image-20240713162421903.png)
+![](https://pic.imgdb.cn/item/66bf3e9cd9c307b7e9a7f5c0.png)
 
-![image-20240713162535101](../../0.笔记图片/image-20240713162535101.png)
+![](https://pic.imgdb.cn/item/66bf3eabd9c307b7e9a80201.png)
 
-![image-20240713175903489](../../0.笔记图片/image-20240713175903489.png)
+![](https://pic.imgdb.cn/item/66bf3ed2d9c307b7e9a821c1.png)
 
+![](https://pic.imgdb.cn/item/66bf3ee3d9c307b7e9a83433.png)
 
-
-![image-20240713180507175](../../0.笔记图片/image-20240713180507175.png)
-
-![image-20240713181908000](../../0.笔记图片/image-20240713181908000.png) 
+![](https://pic.imgdb.cn/item/66bf3f00d9c307b7e9a84beb.png) 

@@ -18,7 +18,7 @@
 
 **软件结构：**
 
-![image-20231021110800113](../../0.笔记图片/image-20231021110800113.png)
+![](https://pic.imgdb.cn/item/66bf3e07d9c307b7e9a773a7.png)
 
 **bin**：含有Maven的运行脚本
 
@@ -86,7 +86,7 @@ LICENSE、NOTICE、README.txt：针对Maven版本，第三方软件等简要介�
 
 > 我们需要将配置好的maven软件，配置到idea开发工具中即可！ 注意：idea工具默认自带maven配置软件，但是因为没有修改配置，建议替换成本地配置好的maven！
 
-![image-20240811140404949](../../0.笔记图片/image-20240811140404949.png)
+![](https://pic.imgdb.cn/item/66bf405cd9c307b7e9ab8598.png)
 
 
 
@@ -134,7 +134,7 @@ GAV遵循一下规则：
 
 ### 2. Idea构建Maven Java SE工程
 
-![image-20240811141435106](../../0.笔记图片/image-20240811141435106.png)
+![](https://pic.imgdb.cn/item/66bf407cd9c307b7e9abdecf.png)
 
 创建成功后生成一个Maven配置文件
 
@@ -165,7 +165,7 @@ GAV遵循一下规则：
 
 创建成功后的文件结构：
 
-![image-20240811142510710](../../0.笔记图片/image-20240811142510710.png)
+![](https://pic.imgdb.cn/item/66bf40bcd9c307b7e9ac78c5.png)
 
 
 
@@ -228,7 +228,7 @@ Maven 是一个强大的构建工具，它提供一种标准化的项目结构�
 
 同时，项目构建还能够将多个开发人员的代码汇合到一起，并能够自动化项目的构建和部署，大大降低了项目的出错风险和提高开发效率。常见的构建工具包括 Maven、Gradle、Ant 等。
 
-![](../../0.笔记图片/image_REm5kk7DnX-17233652720072.png)
+![](https://pic.imgdb.cn/item/66bf3da7d9c307b7e9a7249b.png)
 
 
 
@@ -268,7 +268,7 @@ Maven 是一个强大的构建工具，它提供一种标准化的项目结构�
 
 ### 3. 可视化方式项目构建
 
-![image-20231021153444864](../../0.笔记图片/image-20231021153444864-17233678982943.png)
+![](https://pic.imgdb.cn/item/66bf3e30d9c307b7e9a79a1e.png)
 
 
 
@@ -517,7 +517,7 @@ dependencies标签下引入开发需要的jar包！我们可以在build/plugins/
 
 当直接引用或者间接引用出现了相同的jar包! 这时呢，一个项目就会出现相同的重复jar包，这就算作冲突！依赖冲突避免出现重复依赖，并且终止依赖传递！
 
-![](../../0.笔记图片/image_km7_szBRUw.png)
+![](https://pic.imgdb.cn/item/66bf3d58d9c307b7e9a6d72a.png)
 
 maven自动解决依赖冲突问题能力，会按照自己的原则，进行重复依赖选择。同时也提供了手动解决的冲突的方式，不过不推荐！
 

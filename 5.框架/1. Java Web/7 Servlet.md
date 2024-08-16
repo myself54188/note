@@ -96,7 +96,7 @@ public class HelloServlet implements Servlet {
 
 ### servlet实现过程：
 
-![image-20240714001618244](../../0.笔记图片/image-20240714001618244.png)
+![](https://pic.imgdb.cn/item/66bf3f3bd9c307b7e9a89c38.png)
 
 1. 通过localhoot，8080，/servlet 找到对应服务器对应端口对应工程
 2. 已知资源路径，优先在web.xml配置文件中找对应的`<servlet-mapping>`标签的资源路径名即对应的servlet类名，通过servlet类名，在`<servlet>`标签中找到`<servlet-class>`，即为这个资源路径对应的包名加类名。
@@ -200,7 +200,7 @@ public class HelloServlet2 extends HttpServlet {
 
 ### Servlet 类的继承关系：
 
-![image-20240714104952188](../../0.笔记图片/image-20240714104952188.png)
+![](https://pic.imgdb.cn/item/66bf3f6fd9c307b7e9a951b3.png)
 
 ### ServletConfig 类：
 
@@ -403,7 +403,7 @@ System.out.println("Context1 中获取域数据 key1 的值是:"+ context.getAtt
 
 ##### 4.请求转发：
 
-![image-20240716130803705](../../0.笔记图片/image-20240716130803705.png)
+![](https://pic.imgdb.cn/item/66bf3f86d9c307b7e9a982f8.png)
 
 
 
