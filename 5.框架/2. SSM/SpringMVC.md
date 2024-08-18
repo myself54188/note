@@ -212,7 +212,7 @@ public String toTarget() {
 
 1. 浏览器发送请求。
 2. 若请求地址符合前端控制器的url-pattern，该请求就会被前端控制器DispatcherServlet 处理。
-3. 前端控制器会读取SpringMVC的核心配置文件，通过扫描组件找到控制器，将请求地址和控制器中==@RequestMapping==注解的value属性值进行匹配。
+3. 前端控制器会读取 SpringMVC 的核心配置文件，通过扫描组件找到控制器，将请求地址和控制器中==@RequestMapping==注解的value属性值进行匹配。
 4. 若匹配成功，该注解所标识的控制器方法就是处理请求的方法。处理请求的方法需要返回一个字符串类型的视图名称，该视图名称会被视图解析器解析，加上前缀和后缀组成视图的路径。
 5. 之后通过Thymeleaf对视图进行渲染，最终<font color="red">转发</font>到视图所对应页面。
 
@@ -433,4 +433,161 @@ public String testRest(@PathVariable("id") String id, @PathVariable("username") 
 
 ## 四. SpringMVC获取请求参数
 
- 
+###  1. 通过 ServletAPI 获取
+
+将 HttpServletRequest 作为控制器方法的形参，此时 HttpServletRequest 类型的参数表示封装了当前请求的请求报文的对象
+
+```html
+<a th:href="@{/paramAPI?username='ad'&password=123}">通过req获取请求参数</a><br>
+```
+
+```java
+@RequestMapping(value = "/paramAPI")
+    public String paramAPI(HttpServletRequest req) {
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
+        System.out.println("通过API获取：" + username + " " + password);
+        return "Param";
+    }
+```
+
+
+
+### 2. 通过控制器方法的形参获取请求参数
+
+在控制器方法的形参位置，<font color="red">设置和请求参数同名的形参</font>，当浏览器发送请求，匹配到请求映射时，在 DispatcherServlet 中就会将<font color="red">请求参数赋值给相应的形参</font>
+
+```html
+<a th:href="@{/testParam?username='ad'&password=123}">通过控制器的形参获取请求参数</a>
+```
+
+```java
+@RequestMapping(value = "/testParam")
+    public String testParam(Object username, Object password) {
+        System.out.println("通过控制器获取：" + username + " " + password);
+        return "Param";
+    }
+```
+
+> 注：
+>
+> 若请求所传输的请求参数中有多个同名的请求参数，此时可以在控制器方法的形参中设置字符串数组或者字符串类型的形参接收此请求参数
+>
+> 若使用字符串数组类型的形参，此参数的数组中包含了每一个数据
+>
+> 若使用字符串类型的形参，此参数的值为每个数据中间使用逗号拼接的结果
+
+
+
+### 3. @RequestParam
+
+@RequestParam是将<font color="red">请求参数和控制器方法的形参</font>创建映射关系
+
+@RequestParam注解一共有三个属性：
+
+- value：指定为形参赋值的请求参数的参数名
+
+- required：设置是否必须传输此请求参数，默认值为true
+
+> 若设置为true时，则当前请求必须传输value所指定的请求参数，若没有传输该请求参数，且没有设置defaultValue属性，则页面报错400：Required String parameter 'xxx' is not present；
+>
+> 若设置为false，则当前请求不是必须传输value所指定的请求参数，若没有传输，则注解所标识的形参的值为null
+
+- defaultValue：不管required属性值为true或false，当value所指定的请求参数没有传输或传输的值为""时，则使用默认值为形参赋值
+
+```html
+<a th:href="@{/RequestParam?username='ad'&password=123}">通过 @RequestParam 获取请求参数</a><br>
+```
+
+```java
+@RequestMapping(value = "/RequestParam")
+public String RequestParam(
+        @RequestParam("username") String username,
+        @RequestParam("password") String password
+) {
+    System.out.println("通过 RequestParam 获取：" + username + " " + password);
+    return "Param";
+}
+```
+
+
+
+### 4. @RequestHeader 获取 Header 的值
+
+@RequestHeader是将<font color="red">请求头信息和控制器方法的形参</font>创建映射关系
+
+@RequestHeader注解一共有三个属性：value、required、defaultValue，用法同@RequestParam
+
+```html
+<a th:href="@{/RequestHeader}">通过 @RequestHeader 获取请求头信息</a><br>
+```
+
+```java
+@RequestMapping(value = "/RequestHeader")
+public String RequestHeader(@RequestHeader("Host") String host) {
+    System.out.println("通过 RequestHeader 获取 Host 为：" + host);
+    return "Param";
+}
+```
+
+
+
+### 5. @CookieValue 获取 Cookie 的值
+
+@CookieValue是将<font color="red">cookie数据和控制器方法的形参</font>创建映射关系
+
+@CookieValue注解一共有三个属性：value、required、defaultValue，用法同@RequestParam
+
+```java
+@RequestMapping(value = "/CookieValue")
+public String CookieValue(@CookieValue("值") String cookie) {
+    System.out.println(cookie);
+    return "Param";
+}
+```
+
+
+
+### 6. 通过 POJO 获取请求参数
+
+可以在控制器方法的形参位置设置一个实体类类型的形参，此时若浏览器传输的请求参数的参数名和实体类中的属性名一致，那么请求参数就会为此属性赋值
+
+```html
+<form th:action="@{/pojoTest}" method="post" name="form">
+    用户名：<input type="text" name="username"><br>
+    密码：<input type="text" name="password"><br>
+    性别：<input type="text" name="sex"><br>
+    年龄：<input type="" name="age"><br>
+    邮箱：<input type="text" name="email"><br>
+    <input type="submit" name="提交">
+</form>
+```
+
+```java
+@RequestMapping(value = "/pojoTest")
+    public String pojoTest(User user) {
+        System.out.println(user);
+        return "Param";
+    }
+```
+
+```java
+package com.chr.SpringMVC.bean;
+
+import lombok.Data;
+
+
+@Data
+// 使用 lombok jar 包，仅需加上@Data注解即可实现生成get，set，构造，toString 方法
+public class User {
+    String username;
+    String password;
+    String sex;
+    BigDecimal age;
+    String email;
+}
+```
+
+
+
+## 五. 域对象共享数据
