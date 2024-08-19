@@ -590,4 +590,216 @@ public class User {
 
 
 
+### 7. 解决控制台输出乱码问题
+
+解决获取请求参数的乱码问题，可以使用SpringMVC提供的编码过滤器 CharacterEncodingFilter，但是必须在web.xml中进行注册
+
+```xml
+<!--配置springMVC的编码过滤器-->
+<filter>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+        <param-name>encoding</param-name>
+        <param-value>UTF-8</param-value>
+    </init-param>
+    <init-param>
+        <param-name>forceResponseEncoding</param-name>
+        <param-value>true</param-value>
+    </init-param>
+</filter>
+<filter-mapping>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+</filter-mapping>
+```
+
+> 注：
+>
+> SpringMVC中处理编码的过滤器一定要配置到其他过滤器之前，否则无效
+
+
+
 ## 五. 域对象共享数据
+
+### 0. 预对象回顾
+
+- Request 域：从 HTTP 请求发起，到服务器吹了结束并返回响应的整个过程，在这个过程中，如果使用了 forward 方式（请求转发）跳转到其他页面，这些页面都可以使用在 Request 域中设置的变量。但是一旦页面刷新，变量就会重新计算。
+- session 域：有效范围是当前会话，即从用户打开浏览器开始，到关闭浏览器的整个工程，这个过程可能包含多个请求响应，只要用户不关闭浏览器，服务器就可以识别这些请求来自用一个会话。浏览器关闭，session 域中数据清空。
+- application 域：作用范围是这个 web 应用程序，当服务器重启，application 域中数据清空。 
+
+
+
+### 1. 使用 ServletAPI 向 Request 域对象共享数据
+
+```java
+@RequestMapping(value = "/servletAPITest")
+public String servletAPITest(HttpServletRequest request) {
+    request.setAttribute("testScope", "servletAPITest");
+    return "success";
+}
+```
+
+```html
+<!--index.html-->
+<body>
+<h1>index</h1>
+<iframe th:src="@{/success.html}" width="800" height="300" name="iframe"></iframe><br>
+<a th:href="@{/servletAPITest}" target="iframe">使用 servletAPI 向 Request 域中存储数据</a><br>
+</body>
+```
+
+```html
+<!--success.html-->
+<body>
+<h1>跳转成功</h1>
+<p th:text="${testScope}"></p><br>
+</body>
+```
+
+效果：
+
+![image](https://github.com/myself54188/picx-images-hosting/raw/master/image.839ys4lgey.webp)
+
+
+
+### 2. 使用 ModelAndView 向 Request 域对象共享数据
+
+```java
+@RequestMapping(value = "/ModelAndViewTest")
+public ModelAndView ModelAndViewTest() {
+    ModelAndView mav = new ModelAndView();
+    // 处理模型数据
+    mav.addObject("testScope", "ModelAndViewTest");
+    // 设置视图名称
+    mav.setViewName("success");
+    return mav;
+}
+```
+
+![image](https://github.com/myself54188/picx-images-hosting/raw/master/image.26lel45rg0.webp)
+
+
+
+### 3. 使用 Model 向 Request 域对象共享数据
+
+```java
+@RequestMapping(value = "/modelTest")
+public String modelTest(Model model) {
+    model.addAttribute("testScope", "modelTest");
+    return "success";
+}
+```
+
+![image](https://github.com/myself54188/picx-images-hosting/raw/master/image.b8tshye1c.webp)
+
+
+
+
+
+### 4. 使用 map 向 Request 域对象共享数据
+
+```java
+@RequestMapping("/mapTest")
+public String mapTest(Map<String, Object> map){
+    map.put("testScope", "mapTest");
+    return "success";
+}
+```
+
+![image](https://github.com/myself54188/picx-images-hosting/raw/master/image.5fkihs1l0s.webp)
+
+
+
+### 5. 使用 ModelMap 向 Request 域对象共享数据
+
+```java
+@RequestMapping("/modelMapTest")
+public String modelMapTest(ModelMap modelMap){
+    modelMap.addAttribute("testScope", "modelMapTest");
+    return "success";
+}
+```
+
+![image](https://github.com/myself54188/picx-images-hosting/raw/master/image.58hamchmo9.webp)
+
+
+
+### 6. Model，ModelMap，Map 的关系
+
+![image](https://github.com/myself54188/picx-images-hosting/raw/master/image.2a50iuiwjo.webp)
+
+
+
+### 7. 向 session 域共享数据
+
+```java
+@RequestMapping(value = "sessionTest")
+public String sessionTest(HttpSession session) {
+    session.setAttribute("sessionScope", "sessionTest");
+    return "success";
+}
+```
+
+```html
+<p th:text="${session.sessionScope}"></p><br>
+```
+
+>  使用 session 域中的数据必须采用 session.key 的格式获取 Value 的值
+
+![image](https://github.com/myself54188/picx-images-hosting/raw/master/image.7egp851qs9.webp)
+
+
+
+### 8. 向 application 域共享数据
+
+```java
+@RequestMapping(value = "/applicationTest")
+public String applicationTest(HttpSession session) {
+    ServletContext application = session.getServletContext();
+    application.setAttribute("applicationScope", "applicationTest");
+    return "success";
+}
+```
+
+```html
+<p th:text="${application.applicationScope}"></p>
+```
+
+![image](https://github.com/myself54188/picx-images-hosting/raw/master/image.3uurik7ecn.webp)
+
+
+
+## 六、SpringMVC的视图
+
+- SpringMVC中的视图是View接口，视图的作用渲染数据，将模型Model中的数据展示给用户
+
+- SpringMVC视图的种类很多，默认有<font color="red">转发视图</font>和<font color="red">重定向视图</font>
+
+- 当工程引入 jstl 的依赖，转发视图会自动转换为 JstlView
+
+- 若使用的视图技术为Thymeleaf，在SpringMVC的配置文件中配置了Thymeleaf的视图解析器，由此视图解析器解析之后所得到的是 ThymeleafView
+
+### 1、ThymeleafView
+
+当控制器方法中所设置的视图名称没有任何前缀时，此时的视图名称会被SpringMVC配置文件中所配置的视图解析器解析，视图名称拼接视图前缀和视图后缀所得到的最终路径，会通过**转发**的方式实现跳转
+
+```java
+@RequestMapping("/testHello")
+public String testHello(){
+    return "hello";
+}
+```
+
+
+
+### 2、转发视图
+
+
+
+### 3、重定向视图
+
+
+
+### 4、视图控制器view-controller
+

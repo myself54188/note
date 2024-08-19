@@ -1190,7 +1190,7 @@ public String updateEmployee(Employee employee){
 }
 ```
 
-# 八、HttpMessageConverter
+# 九、HttpMessageConverter
 
 HttpMessageConverter，报文信息转换器，将请求报文转换为Java对象，或将Java对象转换为响应报文
 
@@ -1345,7 +1345,7 @@ public String testAjax(String username, String password){
 
 ResponseEntity用于控制器方法的返回值类型，该控制器方法的返回值就是响应到浏览器的响应报文
 
-# 九、文件上传和下载
+# 十、文件上传和下载
 
 ### 1、文件下载
 
@@ -1428,7 +1428,7 @@ public String testUp(MultipartFile photo, HttpSession session) throws IOExceptio
 }
 ```
 
-# 十、拦截器
+# 十一、拦截器
 
 ### 1、拦截器的配置
 
@@ -1474,7 +1474,7 @@ b>若某个拦截器的preHandle()返回了false
 
 preHandle()返回false和它之前的拦截器的preHandle()都会执行，postHandle()都不执行，返回false的拦截器之前的拦截器的afterComplation()会执行
 
-# 十一、异常处理器
+# 十二、异常处理器
 
 ### 1、基于配置的异常处理
 
@@ -1520,7 +1520,7 @@ public class ExceptionController {
 }
 ```
 
-# 十二、注解配置SpringMVC
+# 十三、注解配置SpringMVC
 
 使用配置类和注解代替web.xml和SpringMVC配置文件的功能
 
@@ -1676,7 +1676,7 @@ public String index(){
 }
 ```
 
-# 十三、SpringMVC执行流程
+# 十四、SpringMVC执行流程
 
 ### 1、SpringMVC常用组件
 

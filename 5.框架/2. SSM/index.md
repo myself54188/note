@@ -29,17 +29,17 @@
 
 ### 域对象共享数据(90min)
 
-- [ ] P34 回顾域对象  06:12
-- [ ] P35 搭建springMVC框架  12:30
+- [x] P34 回顾域对象  06:12
+- [x] P35 搭建springMVC框架  12:30
 
-- [ ] P36 通过servletArequest域对象共享数据  13:35
-- [ ] P37 通过ModelAndView向request域对象共享数据  08:21
-- [ ] P38 通过Model向request域对象共享数据  03:31
-- [ ] P39 通过map向request域对象共享数据  03:57
-- [ ] P40 通过ModelMap向request域对象共享数据  04:04
-- [ ] P41 Model、ModelMap和Map之间的关系  09:21
-- [ ] P42 SpringMVC观察源码  控制器方法执行之后都会返回统一的ModelAndView对象  13:56
-- [ ] P43 通过servletAsession域对象共享数据  04:43
+- [x] P36 通过servletArequest域对象共享数据  13:35
+- [x] P37 通过ModelAndView向request域对象共享数据  08:21
+- [x] P38 通过Model向request域对象共享数据  03:31
+- [x] P39 通过map向request域对象共享数据  03:57
+- [x] P40 通过ModelMap向request域对象共享数据  04:04
+- [x] P41 Model、ModelMap和Map之间的关系  09:21
+- [x] P42 SpringMVC观察源码  控制器方法执行之后都会返回统一的ModelAndView对象  13:56
+- [x] P43 通过servletAsession域对象共享数据  04:43
 - [ ] P44 通过servletAapplication域对象共享数据  07:12
 
 
