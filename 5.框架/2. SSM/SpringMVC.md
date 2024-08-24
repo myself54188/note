@@ -35,9 +35,9 @@ MVC的工作流程：
 
 ## 二. HelloWord
 
-##### 1. 创建 Maven 文件，设置 web 框架
+### 1. 创建 Maven 文件，设置 web 框架
 
-##### 2. 导入 jar 包
+### 2. 导入 jar 包
 
 ```xml
 <!-- SpringMVC -->
@@ -68,7 +68,7 @@ MVC的工作流程：
         </dependency>
 ```
 
-##### 3. 配置 **前端控制器 DispatcherServlet**
+### 3. 配置 **前端控制器 DispatcherServlet**
 
 > 前端控制器实际上是一个servlet程序，用于处理所以请求，需要对它在web.xml中注册。在注册时配置了SpringMVC的配置文件的位置和名称，以及前端控制器的初始化时间提前到服务器启动时
 
@@ -89,7 +89,7 @@ MVC的工作流程：
 </servlet-mapping>
 ```
 
-##### 4. 配置 SpringMVC 的配置文件的位置和名称
+### 4. 配置 SpringMVC 的配置文件的位置和名称
 
 1. 情况一：默认配置方式
    SpringMVC 的配置文件位于 WEB-INF 下，默认名称为`<servlet-name>`(的值) -servlet.xml。
@@ -125,7 +125,7 @@ MVC的工作流程：
 
 
 
-##### 5.  创建请求控制器
+### 5.  创建请求控制器
 
 前端控制器对于浏览器的请求进行了统一的处理，但是具体的请求有不同的处理过程，一次需要创建处理具体请求的类，即请求控制器。
 
@@ -188,7 +188,7 @@ public class HelloController {
 }
 ```
 
-##### 6. 测试
+### 6. 测试
 
 ![](https://github.com/myself54188/picx-images-hosting/raw/master/image-20240813153712344.6t71j6aimn.webp)
 
@@ -208,7 +208,7 @@ public String toTarget() {
 
 ![](https://github.com/myself54188/picx-images-hosting/raw/master/image-20240813154323944.45lufddxs.webp)
 
-##### 7. 总结
+### 7. 总结
 
 1. 浏览器发送请求。
 2. 若请求地址符合前端控制器的url-pattern，该请求就会被前端控制器DispatcherServlet 处理。
@@ -407,6 +407,8 @@ headers属性是一个字符串数组，可以通过四种表达式设置请求�
 -  `？`：表示任意的单个字符
 
 - `*`：表示任意的0个或多个字符
+
+
 
 ### 8. SpringMVC 支持路径中的占位符
 
@@ -780,7 +782,7 @@ public String applicationTest(HttpSession session) {
 
 - 若使用的视图技术为Thymeleaf，在SpringMVC的配置文件中配置了Thymeleaf的视图解析器，由此视图解析器解析之后所得到的是 ThymeleafView
 
-### 1、ThymeleafView
+### 1. ThymeleafView
 
 当控制器方法中所设置的视图名称<font color="red">没有任何前缀</font>时，此时的视图名称会被SpringMVC配置文件中所配置的视图解析器解析，视图名称拼接视图前缀和视图后缀所得到的最终路径，会通过**转发**的方式实现跳转
 
@@ -793,7 +795,7 @@ public String testHello(){
 
 
 
-### 2、转发视图
+### 2. 转发视图
 
 SpringMVC中默认的转发视图是InternalResourceView
 
@@ -810,7 +812,7 @@ public String viewForward() {
 
 
 
-### 3、重定向视图
+### 3. 重定向视图
 
 SpringMVC中默认的重定向视图是RedirectView
 
@@ -825,7 +827,7 @@ public String viewRedirect() {
 
 
 
-### 4、视图控制器view-controller
+### 4. 视图控制器view-controller
 
 当控制器方法中，仅仅用来实现页面跳转，即只需要设置视图名称时，可以将处理器方法使用view-controller标签进行表示
 
@@ -858,18 +860,327 @@ public String view() {
 
 ## 七、RESTful
 
-### 1、RESTful简介
+### 1. RESTful简介
+
+REST：**Re**presentational **S**tate **T**ransfer，表现层资源状态转移。
 
 
 
-### 2、RESTful的实现
+### 2. RESTful的实现
+
+具体说，就是 HTTP 协议里面，四个表示操作方式的动词：GET、POST、PUT、DELETE。
+
+它们分别对应四种基本操作：
+
+- GET 用来获取资源
+- POST 用来新建资源
+- PUT 用来更新资源
+- DELETE 用来删除资源。
+
+REST 风格提倡 URL 地址使用统一的风格设计，从前到后各个单词使用斜杠分开，不使用问号键值对方式携带请求参数，而是将要发送给服务器的数据作为 URL 地址的一部分，以保证整体风格的一致性。
+
+| 操作     | 传统方式         | REST风格                |
+| -------- | ---------------- | ----------------------- |
+| 查询操作 | getUserById?id=1 | user/1-->get请求方式    |
+| 保存操作 | saveUser         | user-->post请求方式     |
+| 删除操作 | deleteUser?id=1  | user/1-->delete请求方式 |
+| 更新操作 | updateUser       | user-->put请求方式      |
 
 
 
-### 3、HiddenHttpMethodFilter
+### 3. HiddenHttpMethodFilter
+
+>  **HiddenHttpMethodFilter** 过滤器可以帮助我们将 POST 请求转换为 DELETE 或 PUT 请求
+
+```xml
+<!--注册 HiddenHttpMethodFilter 过滤器-->
+<filter>
+    <filter-name>HiddenHttpMethodFilter</filter-name>
+    <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+</filter>
+<filter-mapping>
+    <filter-name>HiddenHttpMethodFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+</filter-mapping>
+```
+
+转换为 DELETE 或 PUT 的步骤：
+
+1. 在 web.xml 中注册过滤器
+2. 在传输的表单中加上一个隐藏域，name 为 `_method` ，value 为 `put` 或 `delete`
+
+
+
+### 4. 案例
+
+```txt
+使用 RESTful 风格来进行用户信息的怎删改查
+/user      POST    添加用户信息
+/user/1    DELETE  删除用户信息
+/user      PUT     修改用户信息
+/user      GET     查询所有用户信息
+/user/1    GET     查询用户信息
+```
+
+增：
+
+```html
+<form th:action="@{/user}" method="post">
+    用户名： <input type="text" name="username"><br>
+    密 码：<input type="password" name="password"><br>
+    <input type="submit" value="添加">
+</form>
+```
+
+```java
+@RequestMapping(value = "/user", method = RequestMethod.POST)
+public String addUser(
+        @RequestParam("username") String username,
+        @RequestParam("password") String password
+) {
+    System.out.println("添加用户信息：" + username + " " + password);
+    return "success";
+}
+```
+
+
+
+删：
+
+```html
+<form id="deleteForm" th:action="@{/user/1}" method="post" style="display: none;">
+    <input type="hidden" name="_method" value="delete">
+    <button type="submit">Delete</button>
+</form>
+<button onclick="document.getElementById('deleteForm').submit();">删除用户信息</button>
+```
+
+```java
+@RequestMapping(value = "/user/1", method = RequestMethod.DELETE)
+public String deleteUser() {
+    System.out.println("删除用户信息");
+    return "success";
+}
+```
+
+
+
+改：
+
+```html
+<form th:action="@{/user}" method="post">
+    <input type="hidden" name="_method" value="put">
+    用户名： <input type="text" name="username"><br>
+    密 码：<input type="password" name="password"><br>
+    <input type="submit" value="修改">
+</form>
+```
+
+```java
+@RequestMapping(value = "/user", method = RequestMethod.PUT)
+public String updateUser(
+        @RequestParam("username") String username,
+        @RequestParam("password") String password
+) {
+    System.out.println("修改用户信息：" + username + " " + password);
+    return "success";
+}
+```
+
+
+
+查：
+
+```html
+<a th:href="@{/user}">查询所有用户信息</a><br>
+<a th:href="@{/user/1}">查询用户信息</a><br>
+```
+
+```java
+@RequestMapping(value = "/user", method = RequestMethod.GET)
+public String getAllUser() {
+    System.out.println("查询所有用户信息");
+    return "success";
+}
+
+@RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
+public String getUser(
+        @PathVariable("id") String id
+) {
+    System.out.println("查询用户信息：" + id);
+    return "success";
+}
+```
 
 
 
 
 
-# 
+## 八、HttpMessageConverter
+
+HttpMessageConverter，报文信息转换器，将**请求报文转换为Java对象**，或将**Java对象转换为响应报文**
+
+> 请求报文：浏览器 -> 服务器
+>
+> 响应报文：服务器 -> 浏览器
+
+HttpMessageConverter提供了两个注解和两个类型：
+
+|                            |     注解      |       类       |
+| :------------------------: | :-----------: | :------------: |
+| 请求体（报文） -> Java对象 | @RequestBody  | RequestEntity  |
+| Java对象 -> 响应体（报文） | @ResponseBody | ResponseEntity |
+
+
+
+### 1. @RequestBody
+
+@RequestBody可以获取<font color="red">请求体</font>，需要在控制器方法设置一个形参，使用@RequestBody进行标识，当前请求的请求体就会为当前注解所标识的形参赋值
+
+> get 请求不会有请求体，post 请求才会有请求体
+
+```html
+<form th:action="@{/TestRequestBody}" method="post">
+    用户名：<input type="text" name="username">
+    密码：<input type="password" name="password">
+    <input type="submit" value="@RequestBody 注解测试">
+</form>
+```
+
+```java
+@RequestMapping("/RequestBody")
+public String RequestBody(@RequestBody String req) {
+    System.out.println(req);
+    return "success";
+}
+```
+
+> 还可以通过其他方法获取请求参数
+
+
+
+### 2. RequestEntity
+
+RequestEntity封装<font color="red">请求报文</font>的一种类型，需要在控制器方法的形参中设置该类型的形参，当前请求的请求报文就会赋值给该形参，可以通过==getHeaders()==获取请求头信息，通过==getBody()==获取请求体信息
+
+```html
+<form th:action="@{/TestRequestEntity}" method="post">
+    用户名：<input type="text" name="username">
+    密码：<input type="password" name="password">
+    <input type="submit" value="TestRequestEntity 测试">
+</form>
+```
+
+```java
+@RequestMapping("/TestRequestEntity")
+public String TestRequestEntity(RequestEntity<String> requestEntity) {
+    System.out.println("requestEntity：" + requestEntity);
+    System.out.println("请求头：" + requestEntity.getHeaders());
+    System.out.println("请求体：" + requestEntity.getBody());
+    return "success";
+}
+```
+
+```text
+requestEntity：<POST http://localhost:8080/SpringMVC_demo4/TestRequestEntity,username=12&password=21,[host:"localhost:8080", connection:"keep-alive", content-length:"23", cache-control:"max-age=0", sec-ch-ua:""Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"", sec-ch-ua-mobile:"?0", sec-ch-ua-platform:""Windows"", upgrade-insecure-requests:"1", origin:"http://localhost:8080", user-agent:"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36", accept:"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7", sec-fetch-site:"same-origin", sec-fetch-mode:"navigate", sec-fetch-user:"?1", sec-fetch-dest:"document", referer:"http://localhost:8080/SpringMVC_demo4/", accept-encoding:"gzip, deflate, br, zstd", accept-language:"zh-CN,zh;q=0.9", cookie:"Idea-22e28551=e6da7e7c-cc9a-4bdb-9b01-d8a03a4750ec", Content-Type:"application/x-www-form-urlencoded;charset=UTF-8"]>
+
+请求头：[host:"localhost:8080", connection:"keep-alive", content-length:"23", cache-control:"max-age=0", sec-ch-ua:""Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"", sec-ch-ua-mobile:"?0", sec-ch-ua-platform:""Windows"", upgrade-insecure-requests:"1", origin:"http://localhost:8080", user-agent:"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36", accept:"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7", sec-fetch-site:"same-origin", sec-fetch-mode:"navigate", sec-fetch-user:"?1", sec-fetch-dest:"document", referer:"http://localhost:8080/SpringMVC_demo4/", accept-encoding:"gzip, deflate, br, zstd", accept-language:"zh-CN,zh;q=0.9", cookie:"Idea-22e28551=e6da7e7c-cc9a-4bdb-9b01-d8a03a4750ec", Content-Type:"application/x-www-form-urlencoded;charset=UTF-8"]
+
+请求体：username=12&password=21
+```
+
+
+
+### 3. @ResponseBody
+
+##### 向浏览器响应数据的方式一：使用原生API：
+
+```java
+@RequestMapping("/TestResponseAPI")
+public void TestResponse(HttpServletResponse response) throws IOException {
+    response.setContentType("text/html; charset=UTF-8");
+    response.getWriter().write("通过 responseAPI 实现页面响应");
+}
+```
+
+```html
+<a th:href="@{/TestResponseAPI}">通过 responseAPI 实现页面响应测试</a><br>
+```
+
+
+
+##### 向浏览器响应数据的方式二：使用 @ResponseBody 注解：
+
+```java
+@RequestMapping("/TestResponse")
+@ResponseBody
+public String TestResponse() {
+    return "通过 @ResponseBody 实现页面响应";
+}
+```
+
+```html
+<a th:href="@{/TestResponse}">通过 responseAPI 实现页面响应测试</a><br>
+```
+
+
+
+##### 向浏览器响应非字符串类型数据（json）：
+
+需要将非字符串类型数据转换为 json 格式
+
+1. 导入jackson的依赖
+
+   ```xml
+   <dependency>
+     <groupId>com.fasterxml.jackson.core</groupId>
+     <artifactId>jackson-databind</artifactId>
+     <version>2.16.1</version>
+   </dependency>
+   ```
+
+2. 在SpringMVC的核心配置文件 SpringMVC.xml 中开启mvc的注解驱动
+
+   ```xml
+   <mvc:annotation-driven />
+   ```
+
+3. 在处理器方法上使用 ==@ResponseBody== 注解进行标识
+
+4. 将Java对象直接作为控制器方法的返回值返回，就会自动转换为Json格式的**字符串**
+
+   ```java
+   @RequestMapping("/TestResponseUSer")
+   @ResponseBody
+   public User TestResponseUSer() {
+       return new User("1", "admin", "123", "男", 18);
+   }
+   ```
+
+浏览器显示结果：
+
+```text
+{"id":"1","name":"admin","password":"123","gender":"男","age":18}
+```
+
+
+
+### 4. @RestController
+
+@RestController注解是springMVC提供的一个复合注解，标识在控制器的类上，就相当于为类添加了@Controller注解，并且为其中的每个方法添加了@ResponseBody注解
+
+ 
+
+### 5. ResponseEntity
+
+ResponseEntity用于控制器方法的返回值类型，该控制器方法的返回值就是响应到浏览器的响应报文
+
+
+
+## 九、文件上传和下载
+
+### 1. 文件上传
+
+
+
+### 2. 文件下载
