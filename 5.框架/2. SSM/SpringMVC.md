@@ -1181,6 +1181,106 @@ ResponseEntity用于控制器方法的返回值类型，该控制器方法的返
 
 ### 1. 文件上传
 
-test
+```html
+<form th:action="@{/testUpload}" method="post" enctype="multipart/form-data">
+    <input type="file" name="filename"><br>
+    <input type="submit" value="上传"><br>
+</form>
+```
 
-### 2. 文件下载
+<font color="orange">***TODO***</font>
+
+
+
+### 2. 文件下载	
+
+![66bf3c94d9c307b7e9a62952](https://github.com/myself54188/picx-images-hosting/raw/master/image.3k7xxxt438.webp)
+
+```java
+// 下载
+@RequestMapping("/testDown")
+public ResponseEntity<byte[]> testResponseEntity(HttpSession session) throws IOException {
+    //获取ServletContext对象
+    ServletContext servletContext = session.getServletContext();
+    //获取服务器中文件的真实路径
+    String realPath = servletContext.getRealPath("/static/img/1.png");
+    //创建输入流
+    InputStream is = new FileInputStream(realPath);
+    //创建字节数组
+    byte[] bytes = new byte[is.available()];
+    //将流读到字节数组中
+    is.read(bytes);
+    //创建HttpHeaders对象设置响应头信息
+    MultiValueMap<String, String> headers = new HttpHeaders();
+    //设置要下载方式以及下载文件的名字
+    headers.add("Content-Disposition", "attachment;filename=1.jpg");
+    //设置响应状态码
+    HttpStatus statusCode = HttpStatus.OK;
+    //创建ResponseEntity对象
+    ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(bytes, headers, statusCode);
+    //关闭输入流
+    is.close();
+    return responseEntity;
+}
+```
+
+
+
+## 十、拦截器
+
+### 1. 拦截器的配置
+
+
+
+### 2. 拦截器的三个抽象方法
+
+
+
+### 3. 多个拦截器的执行顺序
+
+
+
+## 十一、异常处理器
+
+### 1. 基于配置的异常处理
+
+
+
+### 2. 基于注解的异常处理
+
+
+
+## 十二、注解配置SpringMVC
+
+### 1. 创建初始化类，代替web.xml
+
+
+
+### 2. 创建SpringConfig配置类，代替spring的配置文件
+
+
+
+### 3. 创建WebConfig配置类，代替SpringMVC的配置文件
+
+
+
+### 4. 测试功能
+
+
+
+## 十三、SpringMVC执行流程
+
+### 1. SpringMVC常用组件
+
+
+
+### 2. DispatcherServlet初始化过程
+
+
+
+### 3. DispatcherServlet调用组件处理请求
+
+
+
+### 4. SpringMVC的执行流程
+
