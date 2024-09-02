@@ -1230,13 +1230,93 @@ public ResponseEntity<byte[]> testResponseEntity(HttpSession session) throws IOE
 
 ### 1. 拦截器的配置
 
+SpringMVC中的拦截器用于拦截控制器方法的执行
+
+SpringMVC中的拦截器需要实现 `HandlerInterceptor` 接口
+
+```java
+public class testInterceptor implements HandlerInterceptor {
+    /**
+     * 重写了方法
+     */
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        System.out.println("preHandle 方法被调用");
+        return true; // 表示拦截还是放行
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        System.out.println("postHandle 方法被调用");
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        System.out.println("afterCompletion 方法被调用");
+    }
+}
+```
+
+##### 方法一：
+
+创建了类还要在 SpringMVC.xml 中进行拦截器注册
+
+```xml
+<!--配置拦截器-->
+<mvc:interceptors>
+    <bean class="com.chr.SpringMVC.interceptor.testInterceptor"/>
+</mvc:interceptors>
+```
+
+##### 方法二：
+
+将拦截器方法给Spring管理，转为Bean，即加上 `@Component` 注解
+
+```xml
+mvc:interceptors>
+    <ref bean="testInterceptor"/>
+</mvc:interceptors>
+```
+
+
+
+<font color="red">两种方法效果一样的，无法设置拦截路径</font>
+
+##### 方法三：
+
+```xml
+<mvc:interceptors>
+    <mvc:interceptor>
+        <mvc:mapping path="/*"/> <!--指定拦截路径-->
+        <mvc:exclude-mapping path="/"/> <!--将个别路径排除-->
+        <bean class="com.chr.SpringMVC.interceptor.testInterceptor"/> <!--指定拦截器-->
+    </mvc:interceptor>
+</mvc:interceptors>
+```
+
+这个配置文件实现了对于所有路径进行拦截，但是<font color="red">排除了访问首页的路径</font>。
+
 
 
 ### 2. 拦截器的三个抽象方法
 
+> `preHandle`：控制器方法执行之前执行preHandle()，其boolean类型的返回值表示是否拦截或放行，返回true为放行，即调用控制器方法；返回false表示拦截，即不调用控制器方法
+
+> `postHandle`：控制器方法执行之后执行postHandle()
+
+> `afterComplation`：处理完视图和模型数据，渲染视图完毕之后执行
+
 
 
 ### 3. 多个拦截器的执行顺序
+
+1. 若每个拦截器的preHandle()都返回true
+
+​			preHandle()会按照拦截器在SpringMVC的配置文件的配置顺序执行，而postHandle()和     afterComplation()会按照配置的反序执行
+
+1. 若某个拦截器的preHandle()返回了false
+
+​			preHandle()返回false和它之前的拦截器的preHandle()都会执行，postHandle()都不执行，返回false的拦截器之前的拦截器的afterComplation()会执行
 
 
 
