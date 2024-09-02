@@ -1,11 +1,3 @@
-### 异常处理器(35min)
-
-- [ ] P84 SpringMVC的异常处理  07:13
-- [ ] P85 基于配置的异常处理  10:54
-- [ ] P86 基于注解的异常处理  08:05
-
-
-
 ### 注解配置SpringMVC(60min)
 
 - [ ]  P87 AbstractAnnotationConfigDispatcherServletInitializer介绍  07:12

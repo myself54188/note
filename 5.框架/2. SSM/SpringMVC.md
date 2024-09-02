@@ -1322,11 +1322,47 @@ mvc:interceptors>
 
 ## 十一、异常处理器
 
+> SpringMVC提供了一个处理控制器方法执行过程中所出现的异常的接口：HandlerExceptionResolver
+
+![image](https://github.com/ChengHaoRan666/picx-images-hosting/raw/master/image.4g4fq2jla3.webp)
+
+`SimpleMappingExceptionResolver` 类是用于自己写异常处理器来继承的。
+
+`DefaultHandlerExceptionResolver` 类是 SpringMVC 默认的异常处理器。
+
 ### 1. 基于配置的异常处理
+
+```xml
+<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+    <property name="exceptionMappings">
+        <props>
+            <prop key="异常名称">跳转的页面名称</prop>
+        </props>
+    </property>
+    <property name="exceptionAttribute" value="ex"/>
+</bean>
+```
+
+<font color="blue">当出现对应异常时就会跳转到对应的页面上</font>
+
+`<property name="exceptionAttribute" value="ex"/>`可选，写上后会获取错误信息，以  value 为键，错误信息为值存在 Request 域中。
+
+`<p th:text="${ex}"></p>`可获取展示出。
 
 
 
 ### 2. 基于注解的异常处理
+
+```java
+@ControllerAdvice
+public class testExceptionHandling {
+    @ExceptionHandler(ArithmeticException.class)
+    public String handleArithmeticException(Exception ex, Model model) {
+        model.addAttribute("ex", ex);
+        return "bug";
+    }
+}
+```
 
 
 
