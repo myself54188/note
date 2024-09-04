@@ -1273,7 +1273,7 @@ public class testInterceptor implements HandlerInterceptor {
 将拦截器方法给Spring管理，转为Bean，即加上 `@Component` 注解
 
 ```xml
-mvc:interceptors>
+<mvc:interceptors>
     <ref bean="testInterceptor"/>
 </mvc:interceptors>
 ```
@@ -1368,27 +1368,209 @@ public class testExceptionHandling {
 
 ## 十二、注解配置SpringMVC
 
+在Servlet3.0环境中，容器会在类路径中查找实现javax.servlet.ServletContainerInitializer接口的类，如果找到的话就用它来配置Servlet容器。
+Spring提供了这个接口的实现，名为SpringServletContainerInitializer，这个类反过来又会查找实现WebApplicationInitializer的类并将配置的任务交给它们来完成。Spring3.2引入了一个便利的WebApplicationInitializer基础实现，名为AbstractAnnotationConfigDispatcherServletInitializer，当我们的类扩展了AbstractAnnotationConfigDispatcherServletInitializer并将其部署到Servlet3.0容器的时候，容器会自动发现它，并用它来配置Servlet上下文。
+
 ### 1. 创建初始化类，代替web.xml
+
+```java
+import jakarta.servlet.Filter;
+import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+/**
+ * @Author: 程浩然
+ * @Create: 2024/9/4 - 13:51
+ * @Description: web 层配置类，代替web.xml
+ */
+public class WebInit extends AbstractAnnotationConfigDispatcherServletInitializer {
+
+    /**
+     * 指定 Spring 配置类
+     */
+    @Override
+    protected Class<?>[] getRootConfigClasses() {
+        return new Class[]{SpringConfig.class};
+    }
+
+    /**
+     * 指定 SpringMVC 配置类
+     */
+    @Override
+    protected Class<?>[] getServletConfigClasses() {
+        return new Class[]{WebConfig.class};
+    }
+
+    /**
+     * 指定 DispatcherServlet 的映射规则，即 url-pattern
+     */
+    @Override
+    protected String[] getServletMappings() {
+        return new String[]{"/"};
+    }
+
+    /**
+     * 添加过滤器
+     */
+    @Override
+    protected Filter[] getServletFilters() {
+        // 字符过滤器
+        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+        characterEncodingFilter.setEncoding("UTF-8");
+        characterEncodingFilter.setForceResponseEncoding(true);
+
+        // HiddenHttpMethodFilter 过滤器（用于将get和post请求转换为put和delete请求）
+        HiddenHttpMethodFilter hiddenHttpMethodFilter = new HiddenHttpMethodFilter();
+        return new Filter[]{characterEncodingFilter, hiddenHttpMethodFilter};
+    }
+}
+```
 
 
 
 ### 2. 创建SpringConfig配置类，代替spring的配置文件
 
+```java
+@Configuration
+public class SpringConfig {
+	//ssm整合之后，spring的配置信息写在此类中
+}
+```
+
 
 
 ### 3. 创建WebConfig配置类，代替SpringMVC的配置文件
 
+```java
+package com.chr.SpringMVC.config;
+
+import com.chr.SpringMVC.initerceptor.interceptor_one;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
+import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
+import org.thymeleaf.spring6.SpringTemplateEngine;
+import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.spring6.view.ThymeleafViewResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
+
+import java.util.List;
+import java.util.Properties;
+
+/**
+ * @Author: 程浩然
+ * @Create: 2024/9/4 - 13:56
+ * @Description: SpringMVC 配置类
+ */
+
+/*
+ * 1.扫描组件  2.视图解析器  3.view-Controller  4.default-Servlet-handler
+ * 5.mvc注解驱动 6.文件上传解析器  7.异常处理 8.拦截器
+ */
+
+@Configuration
+// 1.扫描组件
+@ComponentScan("com.chr.SpringMVC.controller")
+// 5.mvc注解驱动
+@EnableWebMvc
+public class WebConfig implements WebMvcConfigurer {
+    // 2.视图解析器
+    //配置生成模板解析器
+    @Bean
+    public ITemplateResolver templateResolver() {
+        SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
+        templateResolver.setPrefix("/WEB-INF/templates/");
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode("HTML");
+        templateResolver.setCharacterEncoding("UTF-8");
+        return templateResolver;
+    }
+
+    //生成模板引擎并为模板引擎注入模板解析器
+    @Bean
+    public SpringTemplateEngine templateEngine(ITemplateResolver templateResolver) {
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver);
+        return templateEngine;
+    }
+
+    //生成视图解析器并未解析器注入模板引擎
+    @Bean
+    public ViewResolver viewResolver(SpringTemplateEngine templateEngine) {
+        ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
+        viewResolver.setOrder(1);
+        viewResolver.setCharacterEncoding("UTF-8");
+        viewResolver.setTemplateEngine(templateEngine);
+        return viewResolver;
+    }
+
+    // 4.default-Servlet-handler
+    @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+        configurer.enable();
+    }
+
+    // 8.拦截器
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // addInterceptor(): 添加拦截器
+        // addPathPatterns(): 添加拦截路径
+        // excludePathPatterns(): 移除拦截路径
+        registry.addInterceptor(new interceptor_one()).addPathPatterns("/");
+    }
+
+    // 3.view-Controller
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/hello").setViewName("hello");
+    }
+
+    // 6.文件上传解析器
+    @Bean
+    public MultipartResolver multipartResolver() {
+        MultipartResolver multipartResolver = new StandardServletMultipartResolver();
+        return multipartResolver;
+    }
 
 
-### 4. 测试功能
+    // 7.异常处理
+    @Override
+    public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
+        SimpleMappingExceptionResolver resolver = new SimpleMappingExceptionResolver();
+        Properties prop = new Properties();
+        prop.setProperty("java.lang.ArithmeticException", "bug.html");
+        resolver.setExceptionMappings(prop);
+        resolver.setExceptionAttribute("ex");
+        resolvers.add(resolver);
+    }
+}
+```
 
 
+
+### 创建一个SpringMVC项目流程：
+
+1. 新建模块
+
+2. 导入jar包
+
+3. 创建 webapp-WEB-INF 文件夹
+
+4. 编写 web.xml 和 springMVC.xml 配置文件（或创建配置类）
+
+    
 
 ## 十三、SpringMVC执行流程
 
 ### 1. SpringMVC常用组件
 
-
+​	
 
 ### 2. DispatcherServlet初始化过程
 

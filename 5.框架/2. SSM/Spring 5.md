@@ -690,7 +690,7 @@ public class UserService {
 // 开启组件扫描
 @ComponentScan(basePackages = {"com.chr.Spring5.ioc.annotate"})
 
-**public class** SpringConfig {
+public class* SpringConfig {
 
 }
 ```
