@@ -40,7 +40,7 @@ MVC的工作流程：
 ### 2. 导入 jar 包
 
 ```xml
-<!-- SpringMVC -->
+		<!-- SpringMVC -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
@@ -53,6 +53,7 @@ MVC的工作流程：
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
         </dependency>
+
         <!-- ServletAPI -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
@@ -60,11 +61,20 @@ MVC的工作流程：
             <version>6.0.0</version>
             <scope>provided</scope>
         </dependency>
+
         <!-- Spring6和Thymeleaf整合包 -->
         <dependency>
             <groupId>org.thymeleaf</groupId>
             <artifactId>thymeleaf-spring6</artifactId>
             <version>3.1.2.RELEASE</version>
+        </dependency>
+
+		<!-- 用于直接生成get，set，tostring方法的-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>compile</scope>
         </dependency>
 ```
 
