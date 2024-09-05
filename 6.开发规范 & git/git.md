@@ -81,8 +81,10 @@
 
 1. 先 fork 一个自己版本的项目到自己项目库中
 
-![image-20240905085347867](C:/Users/37883/AppData/Roaming/Typora/typora-user-images/image-20240905085347867.png)2
+![image](https://github.com/ChengHaoRan666/picx-images-hosting/raw/master/image.9kg4j42nbw.webp)
 
 2. 在自己项目中修改
+
 3. 在原项目中点击pull Request 
- ![image-20240905085711147](C:/Users/37883/AppData/Roaming/Typora/typora-user-images/image-20240905085711147.png)
+
+    ![image](https://github.com/ChengHaoRan666/picx-images-hosting/raw/master/image.58hbbkmgti.webp)
