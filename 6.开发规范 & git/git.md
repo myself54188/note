@@ -4,6 +4,8 @@
 
 ![image](https://github.com/ChengHaoRan666/picx-images-hosting/raw/master/image.m0nuhrqi.webp)
 
+
+
 ### 2. git 常用命令
 
 |                         命令名称                         |                  作用                   |
@@ -58,3 +60,29 @@
 |    <font color="red">git clone 远程地址</font>    |     <font color="red">将远程仓库的内容克隆到本地</font>      |
 | <font color="red">git pull 别名 远程分支名</font> | <font color="red">将远程仓库对于分支最新内容拉下来后与当前本地分支<br />直接合并</font> |
 
+> clone 会自己做三件事：1. 拉取代码  2. 初始化本地库  3. 创建别名
+
+
+
+### 4. github 上添加同伴
+
+1. 在项目的设置中找到 collaborators 添加伙伴
+
+![image](https://github.com/ChengHaoRan666/picx-images-hosting/raw/master/image.5j454pkztw.webp)
+
+2. 点击邀请邀请伙伴
+ ![image](https://github.com/ChengHaoRan666/picx-images-hosting/raw/master/image.7zqdjmt99s.webp)
+
+> <font color="red">添加伙伴后伙伴可以将代码提交到远程库中</font>
+
+
+
+### 5. 团队外人员远程修改提交代码
+
+1. 先 fork 一个自己版本的项目到自己项目库中
+
+![image-20240905085347867](C:/Users/37883/AppData/Roaming/Typora/typora-user-images/image-20240905085347867.png)2
+
+2. 在自己项目中修改
+3. 在原项目中点击pull Request 
+ ![image-20240905085711147](C:/Users/37883/AppData/Roaming/Typora/typora-user-images/image-20240905085711147.png)
