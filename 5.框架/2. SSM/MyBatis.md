@@ -604,9 +604,18 @@ type="JNDI"：调用上下文中的数据源
 
 
 
-## 三. MyBatis 获取参数值的两种方式
+## 三. MyBatis 获取参数值的多种种方式
 
 ### 1. 获取单个参数
+
+```xml
+<!--    int delete(Integer id);-->
+    <delete id="delete">
+        delete from t_user where id = #{id};
+    </delete>
+```
+
+获取单个参数可以通过`#{xxx}`的方式获取，在其中填上获取的参数名，参数名可以随便写
 
 
 
@@ -614,27 +623,308 @@ type="JNDI"：调用上下文中的数据源
 
 ### 2. 获取多个参数
 
+若mapper接口中的方法参数为多个时，此时MyBatis==会自动将这些参数放在一个map集合==中，以<font color="red">arg0,arg1...</font>为键，以参数为值；以<font color="red">param1,param2...</font>为键，以参数为值；因此只需要通过`#{}`访问map集合的键就可以获取相对应的值
+
+```java
+public void insertUserTest() throws IOException {
+    SqlSession sqlSession = SqlSessionUtils.getSqlSession();
+    UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+    System.out.println(mapper.insertUser(3,"a3","b3","c3"));
+}
+```
+
+
+
+```xml
+<insert id="insertUser">
+    insert into t_user values(#{param1},#{param2},#{param3},#{param4});
+</insert>
+```
+
+```xml
+<insert id="insertUser">
+    insert into t_user values(#{arg0},#{arg1},#{arg2},#{arg3});
+</insert>
+```
+
+
+
 
 
 ### 3. 获取 map 集合类型的参数
+
+若mapper接口中的方法需要的参数为多个时，此时可以手动创建map集合，将这些数据放在map中，只需要通过和`#{}`访问==map集合的键==就可以获取相对应的值。
+
+```java
+@Test
+public void insertUserTest() throws IOException {
+    SqlSession sqlSession = SqlSessionUtils.getSqlSession();
+    UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+    Map<String, String> map = new HashMap<>();
+    map.put("id", "4");
+    map.put("account", "a4");
+    map.put("password", "b4");
+    map.put("nickname", "c4");
+    System.out.println(mapper.insertUser(map));
+}
+```
+
+```xml
+<insert id="insertUser">
+    insert into t_user values(#{id},#{account},#{password},#{nickname});
+</insert>
+```
+
+```java
+int insertUser(Map<String,String> map);
+```
+
+
 
 
 
 ### 4. 获取实体类型的参数
 
+若mapper接口中的方法参数为实体类对象时，此时可以使用`#{}`，通过==访问实体类对象中的属性名获取属性值==
+
+```java
+int insertUser(user user);
+```
+
+```xml
+<insert id="insertUser">
+    insert into t_user values(#{id},#{account},#{password},#{nickname});
+</insert>
+```
+
+```java
+@Test
+public void insertUserTest() throws IOException {
+    SqlSession sqlSession = SqlSessionUtils.getSqlSession();
+    UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+    Map<String, String> map = new HashMap<>();
+    user user = new user(5, "a5", "b5", "c5");
+    System.out.println(mapper.insertUser(user));
+}
+```
+
 
 
 ### 5. 使用@Param获取参数
 
+可以通过@Param注解标识`mapper接口中的方法参数`
 
+此时，会将这些参数放在map集合中，以@Param注解的value属性值为键，以参数为值；
+
+以param1,param2...为键，以参数为值；
+
+只需要通过`#{}`访问map集合的键就可以获取相对应的值
+
+```java
+int insertUser(@Param("id") Integer id,
+               @Param("account") String account,
+               @Param("password") String password,
+               @Param("nickname") String nickname
+);
+```
+
+```xml
+<insert id="insertUser">
+    insert into t_user values(#{id},#{account},#{password},#{nickname});
+</insert>
+```
+
+```java
+@Test
+public void insertUserTest() throws IOException {
+    SqlSession sqlSession = SqlSessionUtils.getSqlSession();
+    UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+    System.out.println(mapper.insertUser(6,"a6","b6","c6"));
+}
+```
 
 
 
 ## 四. MyBatis的各种查询功能
 
+### 1. 查询一个实体类对象
 
+```java
+/**
+  * 根据用户id查询用户信息
+  */
+user getUserById(@Param("id") Integer id);
+```
+
+```xml
+<select id="getUserById" resultType="User">
+	select * from t_user where id = #{id}
+</select>
+```
+
+
+
+### 2. 查询一个 list 集合
+
+```java
+/**
+  * 查询所有用户信息
+  */
+List<user> getUserList();
+```
+
+```xml
+<select id="getUserList" resultType="User">
+	select * from t_user
+</select>
+```
+
+
+
+### 3. 查询单个数据
+
+>在MyBatis中，对于Java中常用的类型都设置了类型别名
+>
+>例如：`java.lang.Integer`-->`int`|`integer`
+>
+>例如：`int`-->`_int`|`_integer` 
+>
+>例如：`Map`-->`map `,` List`-->`list`
+
+
+
+```java
+/**
+ * 查询用户表的总记录数
+ */
+public int getCount();
+```
+
+```xml
+<select id="getCount" resultType="_int">
+    select count(id) from t_user;
+</select>
+```
+
+```java
+@Test
+public void selectCount() throws IOException {
+    SqlSession sqlSession = SqlSessionUtils.getSqlSession();
+    UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+    System.out.println(mapper.getCount());
+}
+```
+
+
+
+### 4. 查询一条数据为 map 集合
+
+```xml
+<select id="getMapById" resultType="map">
+    select * from t_user where id = #{id};
+</select>
+```
+
+```java
+@Test
+public void getMapById() throws IOException {
+    SqlSession sqlSession = SqlSessionUtils.getSqlSession();
+    UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+    System.out.println(mapper.getMapById(2));
+}
+```
+
+```java
+/**
+ * 根据id查询信息，返回一个map
+ */
+public Map<String ,String > getMapById(@Param("id") Integer id);
+```
+
+
+
+### 5. 查询多条数据为 map 集合
+
+##### 方法一：返回一个List，里面放多个map
+
+```java
+/**
+ * 查询所有信息，返回一个map
+ */
+public List<Map<String, Objects>> getMap();
+```
+
+```xml
+<select id="getMap" resultType="map">
+    select * from t_user;
+</select>
+```
+
+```java
+@Test
+public void getMap() throws IOException {
+    SqlSession sqlSession = SqlSessionUtils.getSqlSession();
+    UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+    System.out.println(mapper.getMap());
+}
+```
+
+
+
+##### 方法二：使用 @MapKey 注解
+
+```xml
+<select id="getMap" resultType="map">
+    select * from t_user;
+</select>
+```
+
+```java
+@Test
+public void getMap() throws IOException {
+    SqlSession sqlSession = SqlSessionUtils.getSqlSession();
+    UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+    System.out.println(mapper.getMap());
+}
+```
+
+```java
+/**
+     * 查询所有信息，返回一个map
+     */
+    @MapKey("id")
+    public Map<String, Objects> getMap();
+```
+
+> 使用 MapKey 注解会让设置的 val 值为 key，其他值为 val
+
+```txt
+结果：
+{
+2={password=b2, nickname=c2, id=2, account=a2}, 
+3={password=a3, nickname=b3, id=3, account=3}, 
+4={password=b4, nickname=c4, id=4, account=a4}, 
+5={password=b5, nickname=c5, id=5, account=a5}, 
+6={password=b6, nickname=c6, id=6, account=a6}}
+
+```
 
 
 
 ## 五. 特殊sql的执行
+
+### 1. 模糊查询
+
+
+
+### 2. 批量删除
+
+
+### 3. 动态设置表名
+
+
+
+
+
+### 4. 添加功能获取自增的主键
 
