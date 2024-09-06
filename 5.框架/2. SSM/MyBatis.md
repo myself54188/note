@@ -971,9 +971,20 @@ int deleteMore(@Param("ids") String ids);
 
 ### 3. 添加功能获取自增的主键
 
+```java
+/**
+ * 添加用户信息
+ * useGeneratedKeys: 设置使用自增的主键
+ * keyProperty: 因为增删改有统一的返回值是受影响的行数，因此只能将获取的自增的主键放在传输的参数user对象的某个属性中
+ */
+int insertUser(user user);
+```
 
-
-
+```xml
+<insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
+	insert into t_user values(null,#{username},#{password},#{age},#{sex})
+</insert>
+```
 
 
 
@@ -982,3 +993,83 @@ int deleteMore(@Param("ids") String ids);
 > ${}使用字符串拼接的方式拼接sql，若为字符串类型或日期类型的字段进行赋值时，需要手动加单引号
 >
 > #{}使用占位符赋值的方式拼接sql，此时为字符串类型或日期类型的字段进行赋值时，可以自动添加单引号
+
+
+
+## 六. 自定义映射 resultMap
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 七. 动态 SQL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 八. Mybatis 的缓存
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 九. Mybatis 的逆向工程
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 十. 分页插件
