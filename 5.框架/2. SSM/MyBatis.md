@@ -63,7 +63,7 @@ src/main/resources/mybatis-config.xml
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://localhost:3306/mysql_text_one@localhost"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/mysql_text_one"/>
                 <property name="username" value="root"/>
                 <property name="password" value="123"/>
             </dataSource>
@@ -76,6 +76,11 @@ src/main/resources/mybatis-config.xml
     </mappers>
 </configuration>
 ```
+
+
+
+> 其中driver，url，username，password可以放在Properties文件中，使用
+> `<properties resource="jdbc.properties"/>`引入
 
 
 
@@ -600,6 +605,26 @@ type="JNDI"：调用上下文中的数据源
 
 
 ## 三. MyBatis 获取参数值的两种方式
+
+### 1. 获取单个参数
+
+
+
+
+
+### 2. 获取多个参数
+
+
+
+### 3. 获取 map 集合类型的参数
+
+
+
+### 4. 获取实体类型的参数
+
+
+
+### 5. 使用@Param获取参数
 
 
 
