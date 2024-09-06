@@ -915,16 +915,70 @@ public void getMap() throws IOException {
 
 ### 1. 模糊查询
 
+```java
+@Test
+public void vagueSelect() throws IOException {
+    SqlSession sqlSession = SqlSessionUtils.getSqlSession();
+    SQLMapper mapper = sqlSession.getMapper(SQLMapper.class);
+    for (user user : mapper.vagueSelect("a"))
+        System.out.println(user);
+}
+```
+
+```xml
+<select id="vagueSelect" resultType="user">
+select * from t_user where account like "%"#{val}"%";
+    </select>
+```
+
+```java
+/**
+ * 模糊查询
+ */
+List<user> vagueSelect (@Param("val") String val);
+```
+
+> 采用 "%"#{val}"%" 的形式拼接
+
 
 
 ### 2. 批量删除
 
+```java
+@Test
+    public void deleteMore() throws IOException {
+        SqlSession sqlSession = SqlSessionUtils.getSqlSession();
+        SQLMapper mapper = sqlSession.getMapper(SQLMapper.class);
+        System.out.println(mapper.deleteMore("1,2,3 "));
+    }
+```
 
-### 3. 动态设置表名
+```xml
+<!--批量删除-->
+<delete id="deleteMore">
+    delete from t_user where account in (${ids});
+</delete>
+```
+
+```java
+/**
+ * 批量删除
+ */
+int deleteMore(@Param("ids") String ids);
+```
+
+
+
+### 3. 添加功能获取自增的主键
 
 
 
 
 
-### 4. 添加功能获取自增的主键
 
+
+> ${}的本质就是字符串拼接，#{}的本质就是占位符赋值
+>
+> ${}使用字符串拼接的方式拼接sql，若为字符串类型或日期类型的字段进行赋值时，需要手动加单引号
+>
+> #{}使用占位符赋值的方式拼接sql，此时为字符串类型或日期类型的字段进行赋值时，可以自动添加单引号
