@@ -10,7 +10,13 @@
 ### 三. 导入 Maven 依赖
 
 ```xml
-<!--声明版本-->
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.chr.website</groupId>
+    <artifactId>website</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging><!--打 war 包-->
+
+    <!--声明版本-->
     <properties>
         <spring.version>6.1.6</spring.version>
     </properties>
@@ -67,7 +73,7 @@
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-spring</artifactId>
-            <version>2.0.6</version>
+            <version>3.0.3</version>
         </dependency>
 
         <!-- 连接池 -->
@@ -190,10 +196,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.servlet.mvc.Controller;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -206,23 +211,17 @@ import java.util.Properties;
 // 表明配置类
 @Configuration
 // 开启扫描，排除 ControllerAdvice 和 Controller 注解的组件
-@ComponentScan(basePackages = "com.chr.website", excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {Controller.class, ControllerAdvice.class})})
+@ComponentScan(basePackages = "com.chr.website", excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {org.springframework.stereotype.Controller.class, org.springframework.web.bind.annotation.ControllerAdvice.class})})
 // 告诉资源路径
 @PropertySources({@PropertySource("classpath:jdbc.properties")})
 // 启用基于注解的事务管理
 @EnableTransactionManagement
 public class SpringConfig {
-
     /**
      * 配置数据源
      */
     @Bean
-    public DataSource dataSource(
-            @Value("${jdbc.driver}") String driver,
-            @Value("${jdbc.url}") String url,
-            @Value("${jdbc.username}") String username,
-            @Value("${jdbc.password}") String password
-    ) {
+    public DataSource dataSource(@Value("${jdbc.driver}") String driver, @Value("${jdbc.url}") String url, @Value("${jdbc.username}") String username, @Value("${jdbc.password}") String password) {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(driver);
         dataSource.setUrl(url);
@@ -236,19 +235,17 @@ public class SpringConfig {
      * 在Mybatis-Config配置文件中的设置都可以在这里设置
      */
     @Bean
-    public SqlSessionFactory sqlSessionFactory(
-            @Autowired DataSource dataSource
-    ) throws Exception {
+    public SqlSessionFactory sqlSessionFactory(@Autowired DataSource dataSource) throws Exception {
         // 创建仓库bean
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        // 设置 Mybatis 配置文件（如果配置文件中没有东西可以不设置）
-        sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
         // 设置数据源
         sqlSessionFactoryBean.setDataSource(dataSource);
+        // 设置 Mybatis 配置文件（如果配置文件中没有东西可以不设置）
+        sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
         // 设置类型别名对应的包
         sqlSessionFactoryBean.setTypeAliasesPackage("com.chr.website.entity");
         // 设置设置映射文件的路径，若映射文件所在路径和mapper接口所在路径一致，则不需要设置
-        sqlSessionFactoryBean.setMapperLocations(new ClassPathResource("mappers/*.xml"));
+        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("mappers/*Mapper.xml"));
         // 设置下划线映射为驼峰
         Properties properties = new Properties();
         properties.put("mapUnderscoreToCamelCase", true);
@@ -259,14 +256,17 @@ public class SpringConfig {
         return sqlSessionFactoryBean.getObject();
     }
 
-    // 配置mapper接口的扫描配置
-    // 由mybatis-spring提供，可以将指定包下所有的mapper接口创建动态代理
-    // 并将这些动态代理作为IOC容器的bean管理
-    @Bean(name = "mapperScannerConfigurer")
+
+    /**
+     * 配置mapper接口的扫描配置<br>
+     * 由mybatis-spring提供，可以将指定包下所有的mapper接口创建动态代理<br>
+     * 并将这些动态代理作为IOC容器的bean管理
+     */
+    @Bean
     public MapperScannerConfigurer mapperScannerConfigurer() {
         MapperScannerConfigurer scanner = new MapperScannerConfigurer();
         scanner.setBasePackage("com.chr.website.mapper");
-        scanner.setSqlSessionFactoryBeanName("SqlSessionFactory");
+        scanner.setSqlSessionFactoryBeanName("sqlSessionFactory");
         return scanner;
     }
 }
@@ -407,6 +407,7 @@ public class WebConfig implements WebMvcConfigurer {
 //        registry.addInterceptor(拦截器).addPathPatterns("/");
     }
 }
+
 ```
 
 ```xml
@@ -429,7 +430,32 @@ jdbc.username=root
 jdbc.password=123
 ```
 
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+    <!-- 指定日志输出的位置，ConsoleAppender表示输出到控制台 -->
+    <appender name="STDOUT"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- 日志输出的格式 -->
+            <!-- 按照顺序分别是：时间、日志级别、线程名称、打印日志的类、日志主体内容、换行 -->
+            <pattern>[%d{HH:mm:ss.SSS}] [%-5level] [%thread] [%logger] [%msg]%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
 
+    <!-- 设置全局日志级别。日志级别按顺序分别是：TRACE、DEBUG、INFO、WARN、ERROR -->
+    <!-- 指定任何一个日志级别都只打印当前级别和后面级别的日志。 -->
+    <root level="DEBUG">
+        <!-- 指定打印日志的appender，这里通过“STDOUT”引用了前面配置的appender -->
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+    <!-- 根据特殊需求指定局部日志级别，可也是包名或全类名。 -->
+    <logger name="com.chr.website" level="DEBUG"/>
+
+</configuration>
+```
 
 ### 六. 写主要业务代码
 

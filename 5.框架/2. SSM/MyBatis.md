@@ -1,4 +1,4 @@
-## 一.  MyBatis 搭建
+## 	一.  MyBatis 搭建
 
 ##### 1. 创建Maven项目，引入依赖
 
