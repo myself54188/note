@@ -162,7 +162,7 @@
 ├── main                                        # 项目主要代码
 │   ├── java                                   # java源代码目录
 │   │   └── com.chr.website                    # 开发者代码主目录
-│   │       ├── config                         # 存放配置文件
+│   │       ├── config                         # 存放配置类
 │   │       ├── controller                     # 存放控制层代码
 │   │       ├── dao                            # 存放 Dao 层代码
 │   │       ├── entity                         # 存放实体类
@@ -172,7 +172,9 @@
 │   │       ├── service                        # 业务逻辑层
 │   │       └── utils                          # 工具类
 │   ├── resources                              # 资源目录，存放配置文件
+│   │		└─ mappers                         # Mybatis 的mapper配置文件
 │   └── webapp                                 # 存放 WEB 相关资源和配置
+│       └── static                             # 存放静态资源（css，js，font）
 │       └── WEB-INF
 │           └── views                          # 存放视图
 │
@@ -339,9 +341,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
@@ -353,7 +353,7 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
  * @Description: WebConfig.java 代替 SpringMVC.xml
  */
 @Configuration
-@ComponentScan({"com.chr.website.controller","com.chr.website.exception"})
+@ComponentScan({"com.chr.website.controller", "com.chr.website.exception"})
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
 
@@ -394,6 +394,14 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public MultipartResolver multipartResolver() {
         return new StandardServletMultipartResolver();
+    }
+
+    /**
+     * 静态资源配置
+     */
+    @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+        configurer.enable();
     }
 
     /**
