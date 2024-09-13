@@ -998,17 +998,147 @@ int insertUser(user user);
 
 ## 六. 自定义映射 resultMap
 
+若字段名和实体类中的属性名不一致，则可以通过resultMap设置自定义映射
+
+若字段名和实体类中的属性名一致时，则可以通过resultType 设置映射
 
 
 
+### 1. 字段名和属性名不一致
+
+解决字段名和属性名不一致导致的无法自动赋值的解决方法：
+
+1. 对于字段名设置别名使其和属性值一致
+2. 设置全局 mapUnderscoreToCamelCase 来让字段名和属性名一致
+3. 设置自定义映射 resultMap
 
 
 
+```xml
+<!--
+resultMap：设置自定义映射
+属性：
+id：表示自定义映射的唯一标识
+type：查询的数据要映射的实体类的类型
+子标签：
+id：设置主键的映射关系
+result：设置普通字段的映射关系
+association：设置多对一的映射关系
+collection：设置一对多的映射关系
+属性：
+property：设置映射关系中实体类中的属性名
+column：设置映射关系中表中的字段名
+-->
+<resultMap id="userMap" type="User">
+<id property="id" column="id"></id>
+<result property="userName" column="user_name"></result>
+<result property="password" column="password"></result>
+<result property="age" column="age"></result>
+<result property="sex" column="sex"></result>
+</resultMap>
+
+<!--List<User> testMohu(@Param("mohu") String mohu);-->
+<select id="testMohu" resultMap="userMap">
+<!--select * from t_user where username like '%${mohu}%'-->
+select id,user_name,password,age,sex from t_user where user_name like
+concat('%',#{mohu},'%')
+</select>
+```
 
 
 
+### 2. 多对一映射处理
+
+1. 级联查询处理映射关系
+
+   ```xml
+   <resultMap id="empDeptMap" type="Emp">
+   <id column="eid" property="eid"></id>
+   <result column="ename" property="ename"></result>
+   <result column="age" property="age"></result>
+   <result column="sex" property="sex"></result>
+   <result column="did" property="dept.did"></result>
+   <result column="dname" property="dept.dname"></result>
+   </resultMap>
+   <!--Emp getEmpAndDeptByEid(@Param("eid") int eid);-->
+   <select id="getEmpAndDeptByEid" resultMap="empDeptMap">
+   select emp.*,dept.* from t_emp emp left join t_dept dept on emp.did =
+   dept.did where emp.eid = #{eid}
+   </select>
+   ```
+
+2. 使用  association 处理映射关系
+
+   > property：需要处理多对一的映射关系的属性名
+   > javaType：该属性的类型
+
+   ```xml
+   <resultMap id="empDeptMap" type="Emp">
+   <id column="eid" property="eid"></id>
+   <result column="ename" property="ename"></result>
+   <result column="age" property="age"></result>
+   <result column="sex" property="sex"></result>
+   <association property="dept" javaType="Dept">
+   <id column="did" property="did"></id>
+   <result column="dname" property="dname"></result>
+   </association>
+   </resultMap>
+   <!--Emp getEmpAndDeptByEid(@Param("eid") int eid);-->
+   <select id="getEmpAndDeptByEid" resultMap="empDeptMap">
+   select emp.*,dept.* from t_emp emp left join t_dept dept on emp.did =
+   dept.did where emp.eid = #{eid}
+   </select>
+   ```
+
+3. 分布查询
+
+```xml
+<resultMap id="empDeptStepMap" type="Emp">
+<id column="eid" property="eid"></id>
+<result column="ename" property="ename"></result>
+<result column="age" property="age"></result>
+<result column="sex" property="sex"></result>
+<!--
+select：设置分步查询，查询某个属性的值的sql的标识（namespace.sqlId）
+column：将sql以及查询结果中的某个字段设置为分步查询的条件
+-->
+    <association property="dept"
+select="com.atguigu.MyBatis.mapper.DeptMapper.getEmpDeptByStep" column="did">
+</association>
+</resultMap>
+<!--Emp getEmpByStep(@Param("eid") int eid);-->
+<select id="getEmpByStep" resultMap="empDeptStepMap">
+select * from t_emp where eid = #{eid}
+</select>
+```
 
 
+
+> 分步查询的优点：可以实现延迟加载，但是必须在核心配置文件中设置全局配置信息：lazyLoadingEnabled：延迟加载的全局开关。当开启时，所有关联对象都会延迟加载aggressiveLazyLoading：当开启时，任何方法的调用都会加载该对象的所有属性。 否则，每个属性会按需加载此时就可以实现按需加载。`默认关闭`
+>
+> 获取的数据是什么，就只会执行相应的sql。此时可通过association和collection中的fetchType属性设置当前的分步查询是否使用延迟加载，fetchType="lazy(延迟加载)|eager(立即加载)"
+
+
+
+### 3. 一对多映射处理
+
+```xml
+<resultMap id="deptEmpStep" type="Dept">
+<id property="did" column="did"></id>
+<result property="dname" column="dname"></result>
+<collection property="emps" fetchType="eager"
+select="com.atguigu.MyBatis.mapper.EmpMapper.getEmpListByDid" column="did">
+</collection>
+</resultMap>
+<!--Dept getDeptByStep(@Param("did") int did);-->
+<select id="getDeptByStep" resultMap="deptEmpStep">
+select * from t_dept where did = #{did}
+</select>
+```
+
+一对多映射用fetchType表名集合中存储的数据
+
+多对一映射用javaType表名属性的类型
 
 ## 七. 动态 SQL
 
@@ -1044,32 +1174,4 @@ int insertUser(user user);
 
 
 
-
-
-## 九. Mybatis 的逆向工程
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## 十. 分页插件
+## 九. 分页插件
