@@ -1008,9 +1008,9 @@ int insertUser(user user);
 
 解决字段名和属性名不一致导致的无法自动赋值的解决方法：
 
-1. 对于字段名设置别名使其和属性值一致
-2. 设置全局 mapUnderscoreToCamelCase 来让字段名和属性名一致
-3. 设置自定义映射 resultMap
+> 1. 对于字段名设置别名使其和属性值一致
+> 2. 设置全局 mapUnderscoreToCamelCase 来让字段名和属性名一致
+> 3. <font color="red">设置自定义映射 resultMap</font>
 
 
 
@@ -1023,11 +1023,12 @@ type：查询的数据要映射的实体类的类型
 子标签：
 id：设置主键的映射关系
 result：设置普通字段的映射关系
+
 association：设置多对一的映射关系
 collection：设置一对多的映射关系
 属性：
-property：设置映射关系中实体类中的属性名
-column：设置映射关系中表中的字段名
+property：设置映射关系中 实体类 中的属性名
+column：设置映射关系中 表 中的字段名
 -->
 <resultMap id="userMap" type="User">
 <id property="id" column="id"></id>
@@ -1040,14 +1041,13 @@ column：设置映射关系中表中的字段名
 <!--List<User> testMohu(@Param("mohu") String mohu);-->
 <select id="testMohu" resultMap="userMap">
 <!--select * from t_user where username like '%${mohu}%'-->
-select id,user_name,password,age,sex from t_user where user_name like
-concat('%',#{mohu},'%')
+select id,user_name,password,age,sex;
 </select>
 ```
 
 
 
-### 2. 多对一映射处理
+### 2. 多对一映射处理<TODO>
 
 1. 级联查询处理映射关系
 
@@ -1092,25 +1092,25 @@ concat('%',#{mohu},'%')
 
 3. 分布查询
 
-```xml
-<resultMap id="empDeptStepMap" type="Emp">
-<id column="eid" property="eid"></id>
-<result column="ename" property="ename"></result>
-<result column="age" property="age"></result>
-<result column="sex" property="sex"></result>
-<!--
-select：设置分步查询，查询某个属性的值的sql的标识（namespace.sqlId）
-column：将sql以及查询结果中的某个字段设置为分步查询的条件
--->
-    <association property="dept"
-select="com.atguigu.MyBatis.mapper.DeptMapper.getEmpDeptByStep" column="did">
-</association>
-</resultMap>
-<!--Emp getEmpByStep(@Param("eid") int eid);-->
-<select id="getEmpByStep" resultMap="empDeptStepMap">
-select * from t_emp where eid = #{eid}
-</select>
-```
+    ```xml
+    <resultMap id="empDeptStepMap" type="Emp">
+    <id column="eid" property="eid"></id>
+    <result column="ename" property="ename"></result>
+    <result column="age" property="age"></result>
+    <result column="sex" property="sex"></result>
+    <!--
+    select：设置分步查询，查询某个属性的值的sql的标识（namespace.sqlId）
+    column：将sql以及查询结果中的某个字段设置为分步查询的条件
+    -->
+        <association property="dept"
+    select="com.atguigu.MyBatis.mapper.DeptMapper.getEmpDeptByStep" column="did">
+    </association>
+    </resultMap>
+    <!--Emp getEmpByStep(@Param("eid") int eid);-->
+    <select id="getEmpByStep" resultMap="empDeptStepMap">
+    select * from t_emp where eid = #{eid}
+    </select>
+    ```
 
 
 
@@ -1120,7 +1120,7 @@ select * from t_emp where eid = #{eid}
 
 
 
-### 3. 一对多映射处理
+### 3. 一对多映射处理<TODO>
 
 ```xml
 <resultMap id="deptEmpStep" type="Dept">
@@ -1142,9 +1142,11 @@ select * from t_dept where did = #{did}
 
 ## 七. 动态 SQL
 
+Mybatis框架的动态SQL技术是一种根据特定条件动态拼装SQL语句的功能，它存在的意义是为了解决拼接SQL语句字符串时的痛点问题。
 
 
 
+### 1. if 标签
 
 
 
@@ -1175,3 +1177,96 @@ select * from t_dept where did = #{did}
 
 
 ## 九. 分页插件
+
+添加分页插件依赖
+
+```xml
+<!--分页插件-->
+<dependency>
+    <groupId>com.github.pagehelper</groupId>
+    <artifactId>pagehelper</artifactId>
+    <version>5.3.1</version>
+</dependency>
+```
+
+
+
+配置类中设置分页插件
+
+```java
+// 设置分页插件
+sqlSessionFactoryBean.setPlugins(new PageInterceptor());
+```
+
+
+
+代码：
+
+```java
+public String pageTest() {
+    PageHelper.startPage(1, 20); // 开启分页功能
+    List<seller> sellers = sellerDao.selectSellerAll();
+    sellers.forEach(System.out::println);
+    return "index";
+}
+```
+
+
+
+得到的返回值为分页设置后的结果
+
+
+
+> 1. 在查询功能之前使用PageHelper.startPage(int pageNum, int pageSize)开启分页功能pageNum：当前页的页码
+>    pageSize：每页显示的条数
+
+> 2. 在查询获取list集合之后，使用PageInfo<T> pageInfo = new PageInfo<>(List<T> list, int navigatePages)获取分页相关数据
+>
+>    list：分页之后的数据
+>    navigatePages：导航分页的页码数
+
+
+
+> 分页相关数据：
+>
+> PageInfo{
+>
+> pageNum=8, pageSize=4, size=2, startRow=29, endRow=30, total=30, pages=8,
+>
+> list=Page{count=true, pageNum=8, pageSize=4, startRow=28, endRow=32, total=30,
+>
+> pages=8, reasonable=false, pageSizeZero=false},
+>
+> prePage=7, nextPage=0, isFirstPage=false, isLastPage=true, hasPreviousPage=true,
+>
+> hasNextPage=false, navigatePages=5, navigateFirstPage4, navigateLastPage8,
+>
+> navigatepageNums=[4, 5, 6, 7, 8]
+>
+> }
+
+
+
+> 常用数据：
+>
+> pageNum：当前页的页码
+>
+> pageSize：每页显示的条数
+>
+> size：当前页显示的真实条数
+>
+> total：总记录数
+>
+> pages：总页数
+>
+> prePage：上一页的页码
+>
+> nextPage：下一页的页码
+>
+> isFirstPage/isLastPage：是否为第一页/最后一页
+>
+> hasPreviousPage/hasNextPage：是否存在上一页/下一页
+>
+> navigatePages：导航分页的页码数
+>
+> navigatepageNums：导航分页的页码，[1,2,3,4,5]
